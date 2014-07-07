@@ -16,7 +16,18 @@ func (self *page) div(content string){
     self.content += "<div>" + content + "</div>"    
 }
 
-func (self *page) element(name string, content string){
-    self.content += "<" + name + ">" + content + "</" + name + ">"
+func (self *page) element(name string, subcontent interface{}){
+	switch subcontent.(type) {
+		case string:
+			self.content += "<" + name + ">" + subcontent.(string) + "</" + name + ">"
+		case func(*page):
+			self.content += "<" + name + ">"
+			subcontent.(func(* page))(self)
+			self.content += "</" + name + ">"
+		default:
+	}
 }
 
+func (self *page) write(content string){
+	self.content += content
+}

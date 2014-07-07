@@ -18,10 +18,28 @@ func refute(t *testing.T, a interface{}, b interface{}) {
 	}
 }
 
-func TestElement(t *testing.T) {
+func TestWrite(t *testing.T){
+	result := template(func(self *page){
+		self.write("hello world!")
+	})
+
+	expect(t, result, "hello world!")
+}
+
+func TestElement(t *testing.T){
 	result := template(func(self *page){
 		self.element("html", "hello world!")
 	})
 	
+	expect(t, result, "<html>hello world!</html>")
+}
+
+func TestElementWithContentMaker(t* testing.T) {
+	result := template(func(self *page){
+		self.element("html", func(self *page){
+			self.write("hello world!")
+		})
+	})
+
 	expect(t, result, "<html>hello world!</html>")
 }
